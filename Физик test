@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+</head>
+<body>
+
+<h1>ФИЗИК</h1>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Физикийн томьёо туслагч</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; background: #f7f7fb; color: #222; }
+    h1 { margin-bottom: 8px; }
+    .card { background: #fff; border: 1px solid #e6e6ef; border-radius: 12px; padding: 16px; margin: 12px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
+    label { display: block; margin: 8px 0 4px; font-weight: 600; }
+    input, select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cfd1d8; }
+    button { margin-top: 12px; padding: 10px 14px; border: none; border-radius: 8px; background: #4f46e5; color: #fff; font-weight: 600; cursor: pointer; }
+    button:disabled { background: #aaa; cursor: not-allowed; }
+    .result { margin-top: 10px; padding: 10px; background: #eef2ff; border-radius: 8px; }
+    .formula { font-family: "Courier New", monospace; background: #f0f2f8; padding: 6px 8px; border-radius: 6px; display: inline-block; }
+    .note { color: #555; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <h1>Физикийн томьёо туслагч</h1>
+  <p class="note">Томьёо болон алхмуудыг харуулна.</p>
+
+  
+</script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<title>Физикийн Томьёоны Калькулятор</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #eef2ff;
+        padding: 20px;
+    }
+
+    /* Гарчигны стиль */
+    .title {
+        background: #4f46e5;
+        color: white;
+        padding: 12px 16px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 20px;
+        font-weight: bold;
+        width: fit-content;
+        transition: 0.3s;
+    }
+
+    .title:hover {
+        background: #4338ca;
+    }
+
+    /* Панел – урсаж гарч ирэх animation */
+    .panel {
+        max-height: 0;
+        overflow: hidden;
+        background: white;
+        border-radius: 10px;
+        margin-top: 10px;
+        padding: 0 16px;
+        transition: max-height 0.4s ease, padding 0.4s ease;
+        box-shadow: 0 4px 10px #0002;
+    }
+
+    .panel.open {
+        max-height: 500px;
+        padding: 16px;
+    }
+
+    .calc input, .calc select {
+        padding: 8px;
+        margin: 5px;
+        width: 140px;
+        border-radius: 6px;
+        border: 1px solid #bdbdbd;
+    }
+
+    .btn {
+        padding: 10px 15px;
+        background: #4f46e5;
+        border: none;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .btn:hover {
+        background: #4338ca;
+    }
+
+    .result {
+        margin-top: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #111;
+    }
+</style>
+</head>
+<body>
+
+<!-- ------------------- ГАРЧИГ ------------------- -->
+<div class="title" onclick="togglePanel()"> Хурдны Томьёо (v, s, t)</div>
+
+<!-- ------------------- ПАНЕЛ ------------------- -->
+<div id="speedPanel" class="panel">
+
+    <h3>v = s / t томьёоны 3 талт калькулятор</h3>
+    <p>Доорх 3 утгаас 2-г оруул. Үлдсэнийг автоматаар бодно.</p>
+
+    <div class="calc">
+        <input id="v" type="number" step="any" placeholder="Хурд v" />
+        <input id="s" type="number" step="any" placeholder="Зай s" />
+        <input id="t" type="number" step="any" placeholder="Цаг t" />
+
+        <select id="unit">
+            <option value="mps">m/s</option>
+            <option value="kmph">km/h</option>
+        </select>
+
+        <button class="btn" onclick="calcSpeed()">Бодох</button>
+    </div>
+
+    <div class="result" id="speed-result">Энд v, s, t–ийн нэг нь гарна.</div>
+</div>
+
+<script>
+/* Гарчиг дээр дарахад панел урагш урсаж гарч ирэх */
+function togglePanel() {
+    const panel = document.getElementById("speedPanel");
+    panel.classList.toggle("open");
+}
+
+/* Хурдны (v = s/t) 3 талт калькулятор */
+function calcSpeed() {
+    const v = parseFloat(document.getElementById('v').value);
+    const s = parseFloat(document.getElementById('s').value);
+    const t = parseFloat(document.getElementById('t').value);
+    const unit = document.getElementById('unit').value;
+    const out = document.getElementById('speed-result');
+
+    let V = isNaN(v) ? null : v;
+    let S = isNaN(s) ? null : s;
+    let T = isNaN(t) ? null : t;
+
+    let msg = [];
+
+    // Хурд олох (v = s/t)
+    if (V === null && S !== null && T !== null && T > 0) {
+        let calc = S / T;
+        msg.push("→ Хурд v = " + calc.toFixed(3) + " " + (unit === "kmph" ? "km/h" : "m/s"));
+    }
+
+    // Зай олох (s = v * t)
+    if (S === null && V !== null && T !== null) {
+        let calc = V * T;
+        msg.push("→ Зай s = " + calc.toFixed(3));
+    }
+
+    // Цаг олох (t = s / v)
+    if (T === null && S !== null && V !== null && V > 0) {
+        let calc = S / V;
+        msg.push("→ Цаг t = " + calc.toFixed(3));
+    }
+
+    if (msg.length === 0) {
+        out.innerHTML = "v, s, t – 3-аас 2-г оруул!";
+    } else {
+        out.innerHTML = msg.join("<br>");
+    }
+}
+</script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<title>Омын хууль - Калькулятортой</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #eef2ff;
+        padding: 20px;
+    }
+    .title {
+        background: #1d4ed8;
+        color: white;
+        padding: 12px 16px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 20px;
+        font-weight: bold;
+        width: fit-content;
+        transition: 0.3s;
+    }
+    .title:hover { background:#1e40af; }
+
+    .panel {
+        max-height: 0;
+        overflow: hidden;
+        background: white;
+        border-radius: 10px;
+        margin-top: 10px;
+        padding: 0 16px;
+        transition: max-height 0.4s ease, padding 0.4s ease;
+        box-shadow: 0 4px 12px #0002;
+    }
+    .panel.open {
+        max-height: 800px;
+        padding: 16px;
+    }
+
+    .line {
+        opacity: 0;
+        transform: translateY(12px);
+        transition: 0.4s ease;
+        margin: 8px 0;
+        font-size: 18px;
+    }
+    .line.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .calc input {
+        padding: 8px;
+        margin: 5px;
+        width: 140px;
+        border-radius: 6px;
+        border: 1px solid #bdbdbd;
+    }
+
+    .btn {
+        padding: 10px 15px;
+        background: #1d4ed8;
+        border: none;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .result {
+        margin-top: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #111;
+    }
+</style>
+</head>
+<body>
+
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<title>Омын хууль калькулятор</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #eef2ff;
+        padding: 20px;
+    }
+
+    .title {
+        background: #059669;
+        color: white;
+        padding: 12px 16px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 20px;
+        font-weight: bold;
+        width: fit-content;
+        transition: 0.3s;
+    }
+    .title:hover { background:#047857; }
+
+    .panel {
+        max-height: 0;
+        overflow: hidden;
+        background: white;
+        border-radius: 10px;
+        margin-top: 10px;
+        padding: 0 16px;
+        transition: max-height 0.4s ease, padding 0.4s ease;
+        box-shadow: 0 4px 12px #0002;
+    }
+    .panel.open {
+        max-height: 800px;
+        padding: 16px;
+    }
+
+    .line {
+        opacity: 0;
+        transform: translateY(12px);
+        transition: 0.4s ease;
+        margin: 8px 0;
+        font-size: 18px;
+    }
+    .line.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .calc input {
+        padding: 8px;
+        margin: 5px;
+        width: 140px;
+        border-radius: 6px;
+        border: 1px solid #bdbdbd;
+    }
+
+    .btn {
+        padding: 10px 15px;
+        background: #059669;
+        border: none;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .btn:hover { background: #047857; }
+
+    .result {
+        margin-top: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #111;
+    }
+</style>
+</head>
+<body>
+
+<!-- ------------------- ГАРЧИГ ------------------- -->
+<div class="title" onclick="toggleOhm()">Омын хууль (V = I · R)</div>
+
+<!-- ------------------- ПАНЕЛ ------------------- -->
+<div id="ohmPanel" class="panel">
+
+    <div class="line"><b>Омын хуультай танилц</b></div>
+    <div class="line">Хүчдэл, гүйдэл, эсэргүүцлийн хамаарлыг тодорхойлдог.</div>
+
+    <div class="line"><b>Томьёо:</b> V = I · R</div>
+    <div class="line">V — Хүчдэл (вольт)</div>
+    <div class="line">I — Гүйдэл (ампер)</div>
+    <div class="line">R — Эсэргүүцэл (ом)</div>
+
+    <div class="line"><b>Бодох аргууд:</b></div>
+    <div class="line">V = I · R</div>
+    <div class="line">I = V / R</div>
+    <div class="line">R = V / I</div>
+
+    <div class="line" style="margin-top:20px;"><b>Омын хуулийн калькулятор</b></div>
+
+    <div class="line calc">
+        <input id="v" type="number" step="any" placeholder="V (хүчдэл)" />
+        <input id="i" type="number" step="any" placeholder="I (гуйдэл)" />
+        <input id="r" type="number" step="any" placeholder="R (эсэргүүцэл)" />
+        <button class="btn" onclick="calcOhm()">Бодох</button>
+    </div>
+
+    <div class="line result" id="ohm-result">Энд V, I, R–ийн нэг нь автоматаар гарна.</div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    window.toggleOhm = function() {
+        const panel = document.getElementById("ohmPanel");
+        panel.classList.toggle("open");
+        const lines = panel.querySelectorAll(".line");
+
+        if (panel.classList.contains("open")) {
+            lines.forEach((line, idx) => {
+                setTimeout(() => line.classList.add("show"), idx * 120);
+            });
+        } else {
+            lines.forEach(line => line.classList.remove("show"));
+        }
+    }
+
+    window.calcOhm = function() {
+        const v = parseFloat(document.getElementById("v").value);
+        const i = parseFloat(document.getElementById("i").value);
+        const r = parseFloat(document.getElementById("r").value);
+        const out = document.getElementById("ohm-result");
+
+        let V = isNaN(v) ? null : v;
+        let I = isNaN(i) ? null : i;
+        let R = isNaN(r) ? null : r;
+
+        let result = "";
+
+        if (V === null && I !== null && R !== null) {
+            result = `→ Хүчдэл V = ${(I*R).toFixed(3)} вольт`;
+        } else if (I === null && V !== null && R !== null && R !== 0) {
+            result = `→ Гүйдэл I = ${(V/R).toFixed(3)} ампер`;
+        } else if (R === null && V !== null && I !== null && I !== 0) {
+            result = `→ Эсэргүүцэл R = ${(V/I).toFixed(3)} ом`;
+        } else {
+            result = "⚠ 3 утгаас 2-г нь бөглөнө үү!";
+        }
+
+        out.innerHTML = result;
+    }
+
+});
+</script>
+
+</body>
+</html>
+
+</style>
+</head>
+<body>
+
+<!-- ------------------- ГАРЧИГ ------------------- -->
+<div class="title" onclick="toggleForce()"> Хүчний хууль (F = m · a)</div>
+
+<!-- ------------------- ПАНЕЛ ------------------- -->
+<div id="forcePanel" class="panel">
+
+    <div class="line"> <b>Хүчний хуультай танилц</b></div>
+    <div class="line"> Биеийн масс ба хурдны өөрчлөлтөөс хүчийг тодорхойлдог.</div>
+
+    <div class="line"> <b>Томьёо:</b> F = m · a</div>
+    <div class="line"> F — Хүч (ньютон, N)</div>
+    <div class="line"> m — Масс (кг)</div>
+    <div class="line"> a — Хурдны өөрчлөлт (m/s²)</div>
+
+    <div class="line" style="margin-top:20px;"><b> Хүчний калькулятор</b></div>
+
+    <div class="line calc">
+        <input id="F" type="number" step="any" placeholder="F (хүч)" />
+        <input id="m" type="number" step="any" placeholder="m (масс)" />
+        <input id="a" type="number" step="any" placeholder="a (хурдны өөрчлөлт)" />
+
+        <button class="btn" onclick="calcForce()">Бодох</button>
+    </div>
+
+    <div class="line result" id="force-result">Энд F, m, a–ийн нэг нь автоматаар гарна.</div>
+</div>
+
+<script>
+function toggleForce() {
+    const panel = document.getElementById("forcePanel");
+    panel.classList.toggle("open");
+
+    const lines = panel.querySelectorAll(".line");
+
+    if (panel.classList.contains("open")) {
+        lines.forEach((line, idx) => {
+            setTimeout(() => line.classList.add("show"), idx * 120);
+        });
+    } else {
+        lines.forEach(line => line.classList.remove("show"));
+    }
+}
+
+function calcForce() {
+    const Fval = parseFloat(document.getElementById("F").value);
+    const mval = parseFloat(document.getElementById("m").value);
+    const aval = parseFloat(document.getElementById("a").value);
+    const out = document.getElementById("force-result");
+
+    let F = isNaN(Fval) ? null : Fval;
+    let m = isNaN(mval) ? null : mval;
+    let a = isNaN(aval) ? null : aval;
+
+    let result = "";
+
+    // 1) F = m * a
+    if (F === null && m !== null && a !== null) {
+        result = `→ Хүч F = ${ (m * a).toFixed(3) } N`;
+    }
+    // 2) m = F / a
+    else if (m === null && F !== null && a !== null && a !== 0) {
+        result = `→ Масс m = ${ (F / a).toFixed(3) } кг`;
+    }
+    // 3) a = F / m
+    else if (a === null && F !== null && m !== null && m !== 0) {
+        result = `→ Хурдны өөрчлөлт a = ${ (F / m).toFixed(3) } m/s²`;
+    }
+    else {
+        result = "⚠ 3 утгаас 2-г нь бөглөнө үү!";
+    }
+
+    out.innerHTML = result;
+}
+</script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<title>Дулааны хэмжээ (Q = c·m·ΔT)</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #eef2ff;
+        padding: 20px;
+    }
+    .title {
+        background: #2596be;
+        color: white;
+        padding: 12px 16px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 20px;
+        font-weight: bold;
+        width: fit-content;
+        transition: 0.3s;
+    }
+    .title:hover { background:#1A46E6 }
+
+    .panel {
+        max-height: 0;
+        overflow: hidden;
+        background: white;
+        border-radius: 10px;
+        margin-top: 10px;
+        padding: 0 16px;
+        transition: max-height 0.4s ease, padding 0.4s ease;
+        box-shadow: 0 4px 12px #0002;
+    }
+    .panel.open {
+        max-height: 800px;
+        padding: 16px;
+    }
+
+    .line {
+        opacity: 0;
+        transform: translateY(12px);
+        transition: 0.4s ease;
+        margin: 8px 0;
+        font-size: 18px;
+    }
+    .line.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .calc input {
+        padding: 8px;
+        margin: 5px;
+        width: 140px;
+        border-radius: 6px;
+        border: 1px solid #bdbdbd;
+    }
+
+    .btn {
+        padding: 10px 15px;
+        background: #d97706;
+        border: none;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .result {
+        margin-top: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #2596be    }
+</style>
+</head>
+<body><!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<title>Потенциал энерги (PE = m·g·h)</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #eef2ff;
+        padding: 20px;
+    }
+    .title {
+        background: #9333ea;
+        color: white;
+        padding: 12px 16px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 20px;
+        font-weight: bold;
+        width: fit-content;
+        transition: 0.3s;
+    }
+    .title:hover { background:#7e22ce; }
+
+    .panel {
+        max-height: 0;
+        overflow: hidden;
+        background: white;
+        border-radius: 10px;
+        margin-top: 10px;
+        padding: 0 16px;
+        transition: max-height 0.4s ease, padding 0.4s ease;
+        box-shadow: 0 4px 12px #0002;
+    }
+    .panel.open {
+        max-height: 800px;
+        padding: 16px;
+    }
+
+    .line {
+        opacity: 0;
+        transform: translateY(12px);
+        transition: 0.4s ease;
+        margin: 8px 0;
+        font-size: 18px;
+    }
+    .line.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .calc input {
+        padding: 8px;
+        margin: 5px;
+        width: 140px;
+        border-radius: 6px;
+        border: 1px solid #bdbdbd;
+    }
+
+    .btn {
+        padding: 10px 15px;
+        background: #9333ea;
+        border: none;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .result {
+        margin-top: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #111;
+    }
+</style>
+</head>
+<body>
+
+<div class="title" onclick="togglePE()">Потенциал энерги (PE = m·g·h)</div>
+
+<div id="pePanel" class="panel">
+
+    <div class="line"><b>Потенциал энерги:</b> Обьектын масс ба өндөрт суурилан энерги тооцно.</div>
+    <div class="line">Томьёо: PE = m · g · h</div>
+    <div class="line">PE — Потенциал энерги (J)</div>
+    <div class="line">m — Масс (кг)</div>
+    <div class="line">g — Гравитацийн хурд (m/s²)</div>
+    <div class="line">h — Өндөр (м)</div>
+
+    <div class="line" style="margin-top:20px;"><b>Потенциал энерги калькулятор</b></div>
+
+    <div class="line calc">
+        <input id="PE" type="number" step="any" placeholder="PE (J)" />
+        <input id="mass" type="number" step="any" placeholder="m (кг)" />
+        <input id="g" type="number" step="any" placeholder="g (m/s²)" value="9.8" />
+        <input id="height" type="number" step="any" placeholder="h (м)" />
+
+        <button class="btn" onclick="calcPE()">Бодох</button>
+    </div>
+
+    <div class="line result" id="pe-result">Энд PE, m, h–ийн нэг нь автоматаар гарна.</div>
+</div>
+
+<script>
+function togglePE() {
+    const panel = document.getElementById("pePanel");
+    panel.classList.toggle("open");
+
+    const lines = panel.querySelectorAll(".line");
+
+    if (panel.classList.contains("open")) {
+        lines.forEach((line, idx) => {
+            setTimeout(() => line.classList.add("show"), idx * 120);
+        });
+    } else {
+        lines.forEach(line => line.classList.remove("show"));
+    }
+}
+
+function calcPE() {
+    const PEval = parseFloat(document.getElementById("PE").value);
+    const mval = parseFloat(document.getElementById("mass").value);
+    const gval = parseFloat(document.getElementById("g").value);
+    const hval = parseFloat(document.getElementById("height").value);
+    const out = document.getElementById("pe-result");
+
+    let PE = isNaN(PEval) ? null : PEval;
+    let m = isNaN(mval) ? null : mval;
+    let g = isNaN(gval) ? 9.8 : gval; // default 9.8
+    let h = isNaN(hval) ? null : hval;
+
+    let result = "";
+
+    // 1) PE = m * g * h
+    if (PE === null && m !== null && g !== null && h !== null) {
+        result = `→ Потенциал энерги PE = ${(m*g*h).toFixed(3)} J`;
+    }
+    // 2) m = PE / (g * h)
+    else if (m === null && PE !== null && g !== null && h !== null && g*h !== 0) {
+        result = `→ Масс m = ${(PE / (g*h)).toFixed(3)} кг`;
+    }
+    // 3) h = PE / (m * g)
+    else if (h === null && PE !== null && m !== null && g !== null && m*g !== 0) {
+        result = `→ Өндөр h = ${(PE / (m*g)).toFixed(3)} м`;
+    } 
+    else {
+        result = "3 утгаас 2-г бөглөнө үү!";
+    }
+
+    out.innerHTML = result;
+}
+</script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<title>Гэрлийн ойлт (E = h·f)</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #eef2ff;
+        padding: 20px;
+    }
+    .title {
+        background: #b91c1c;
+        color: white;
+        padding: 12px 16px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 20px;
+        font-weight: bold;
+        width: fit-content;
+        transition: 0.3s;
+    }
+    .title:hover { background:#7f1d1d; }
+
+    .panel {
+        max-height: 0;
+        overflow: hidden;
+        background: white;
+        border-radius: 10px;
+        margin-top: 10px;
+        padding: 0 16px;
+        transition: max-height 0.4s ease, padding 0.4s ease;
+        box-shadow: 0 4px 12px #0002;
+    }
+    .panel.open {
+        max-height: 800px;
+        padding: 16px;
+    }
+
+    .line {
+        opacity: 0;
+        transform: translateY(12px);
+        transition: 0.4s ease;
+        margin: 8px 0;
+        font-size: 18px;
+    }
+    .line.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .calc input {
+        padding: 8px;
+        margin: 5px;
+        width: 140px;
+        border-radius: 6px;
+        border: 1px solid #bdbdbd;
+    }
+
+    .btn {
+        padding: 10px 15px;
+        background: #b91c1c;
+        border: none;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .result {
+        margin-top: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #111;
+    }
+</style>
+</head>
+<body>
+
+<div class="title" onclick="toggleLight()">Гэрлийн ойлт (E = h·f)</div>
+
+<div id="lightPanel" class="panel">
+
+    <div class="line"><b>Гэрлийн ойлт:</b> Фотон нэгжийн энерги нь давтамжтай шууд хамааралтай.</div>
+    <div class="line">Томьёо: E = h · f</div>
+    <div class="line">E — Фотоны энерги (жоули, J)</div>
+    <div class="line">h — Планкын тогтмол (6.626×10⁻³⁴ J·s)</div>
+    <div class="line">f — Давтамж (Hz)</div>
+
+    <div class="line" style="margin-top:20px;"><b>Гэрлийн ойлтын калькулятор</b></div>
+
+    <div class="line calc">
+        <input id="E" type="number" step="any" placeholder="E (J)" />
+        <input id="h" type="number" step="any" placeholder="h (J·s)" value="6.626e-34" />
+        <input id="f" type="number" step="any" placeholder="f (Hz)" />
+
+        <button class="btn" onclick="calcLight()">Бодох</button>
+    </div>
+
+    <div class="line result" id="light-result">Энд E, h, f–ийн нэг нь автоматаар гарна.</div>
+</div>
+
+<script>
+function toggleLight() {
+    const panel = document.getElementById("lightPanel");
+    panel.classList.toggle("open");
+
+    const lines = panel.querySelectorAll(".line");
+
+    if (panel.classList.contains("open")) {
+        lines.forEach((line, idx) => {
+            setTimeout(() => line.classList.add("show"), idx * 120);
+        });
+    } else {
+        lines.forEach(line => line.classList.remove("show"));
+    }
+}
+
+function calcLight() {
+    const Eval = parseFloat(document.getElementById("E").value);
+    const hval = parseFloat(document.getElementById("h").value);
+    const fval = parseFloat(document.getElementById("f").value);
+    const out = document.getElementById("light-result");
+
+    let E = isNaN(Eval) ? null : Eval;
+    let h = isNaN(hval) ? 6.626e-34 : hval;
+    let f = isNaN(fval) ? null : fval;
+
+    let result = "";
+
+    // 1) E = h * f
+    if (E === null && h !== null && f !== null) {
+        result = `E = ${(h*f).toExponential(3)} J`;
+    }
+    // 2) f = E / h
+    else if (f === null && E !== null && h !== null && h !== 0) {
+        result = `f = ${(E / h).toExponential(3)} Hz`;
+    }
+    // 3) h = E / f
+    else if (h === null && E !== null && f !== null && f !== 0) {
+        result = `h = ${(E / f).toExponential(3)} J·s`;
+    }
+    else {
+        result = "2 утга оруулна уу!";
+    }
+
+    out.innerHTML = result;
+}
+</script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<title>Хувьсах гүйдлийн хэлхээ (V = I · R)</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #eef2ff;
+        padding: 20px;
+    }
+    .title {
+        background: #065f46;
+        color: white;
+        padding: 12px 16px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 20px;
+        font-weight: bold;
+        width: fit-content;
+        transition: 0.3s;
+    }
+    .title:hover { background:#047857; }
+
+    .panel {
+        max-height: 0;
+        overflow: hidden;
+        background: white;
+        border-radius: 10px;
+        margin-top: 10px;
+        padding: 0 16px;
+        transition: max-height 0.4s ease, padding 0.4s ease;
+        box-shadow: 0 4px 12px #0002;
+    }
+    .panel.open {
+        max-height: 800px;
+        padding: 16px;
+    }
+
+    .line {
+        opacity: 0;
+        transform: translateY(12px);
+        transition: 0.4s ease;
+        margin: 8px 0;
+        font-size: 18px;
+    }
+    .line.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .calc input {
+        padding: 8px;
+        margin: 5px;
+        width: 140px;
+        border-radius: 6px;
+        border: 1px solid #bdbdbd;
+    }
+
+    .btn {
+        padding: 10px 15px;
+        background: #065f46;
+        border: none;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .result {
+        margin-top: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #111;
+    }
+</style>
+</head>
+<body>
+
+<div class="title" onclick="toggleAC()">Хувьсах гүйдлийн хэлхээ (V = I · R)</div>
+
+<div id="acPanel" class="panel">
+
+    <div class="line"><b>Хувьсах гүйдлийн хэлхээ:</b> RMS хүчдэл, гүйдэл, эсэргүүцлийн хамаарлыг тодорхойлдог.</div>
+    <div class="line">Томьёо: V = I · R</div>
+    <div class="line">V — RMS хүчдэл (вольт)</div>
+    <div class="line">I — RMS гүйдэл (ампер)</div>
+    <div class="line">R — Эсэргүүцэл (ом)</div>
+
+    <div class="line" style="margin-top:20px;"><b>AC хэлхээний калькулятор</b></div>
+
+    <div class="line calc">
+        <input id="V" type="number" step="any" placeholder="V (вольт)" />
+        <input id="I" type="number" step="any" placeholder="I (ампер)" />
+        <input id="R" type="number" step="any" placeholder="R (ом)" />
+
+        <button class="btn" onclick="calcAC()">Бодох</button>
+    </div>
+
+    <div class="line result" id="ac-result">Энд V, I, R–ийн нэг нь автоматаар гарна.</div>
+</div>
+
+<script>
+function toggleAC() {
+    const panel = document.getElementById("acPanel");
+    panel.classList.toggle("open");
+
+    const lines = panel.querySelectorAll(".line");
+
+    if (panel.classList.contains("open")) {
+        lines.forEach((line, idx) => {
+            setTimeout(() => line.classList.add("show"), idx * 120);
+        });
+    } else {
+        lines.forEach(line => line.classList.remove("show"));
+    }
+}
+
+function calcAC() {
+    const Vval = parseFloat(document.getElementById("V").value);
+    const Ival = parseFloat(document.getElementById("I").value);
+    const Rval = parseFloat(document.getElementById("R").value);
+    const out = document.getElementById("ac-result");
+
+    let V = isNaN(Vval) ? null : Vval;
+    let I = isNaN(Ival) ? null : Ival;
+    let R = isNaN(Rval) ? null : Rval;
+
+    let result = "";
+
+    // 1) V = I * R
+    if (V === null && I !== null && R !== null) {
+        result = `V = ${(I*R).toFixed(3)} В`;
+    }
+    // 2) I = V / R
+    else if (I === null && V !== null && R !== null && R !== 0) {
+        result = `I = ${(V/R).toFixed(3)} А`;
+    }
+    // 3) R = V / I
+    else if (R === null && V !== null && I !== null && I !== 0) {
+        result = `R = ${(V/I).toFixed(3)} Ом`;
+    }
+    else {
+        result = "2 утга оруулна уу!";
+    }
+
+    out.innerHTML = result;
+}
+</script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<title>Цахилгаан соронзон орон (E = F / q)</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #eef2ff;
+        padding: 20px;
+    }
+    .title {
+        background: #0c4a6e;
+        color: white;
+        padding: 12px 16px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 20px;
+        font-weight: bold;
+        width: fit-content;
+        transition: 0.3s;
+    }
+    .title:hover { background:#075985; }
+
+    .panel {
+        max-height: 0;
+        overflow: hidden;
+        background: white;
+        border-radius: 10px;
+        margin-top: 10px;
+        padding: 0 16px;
+        transition: max-height 0.4s ease, padding 0.4s ease;
+        box-shadow: 0 4px 12px #0002;
+    }
+    .panel.open {
+        max-height: 800px;
+        padding: 16px;
+    }
+
+    .line {
+        opacity: 0;
+        transform: translateY(12px);
+        transition: 0.4s ease;
+        margin: 8px 0;
+        font-size: 18px;
+    }
+    .line.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .calc input {
+        padding: 8px;
+        margin: 5px;
+        width: 140px;
+        border-radius: 6px;
+        border: 1px solid #bdbdbd;
+    }
+
+    .btn {
+        padding: 10px 15px;
+        background: #0c4a6e;
+        border: none;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .result {
+        margin-top: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #111;
+    }
+</style>
+</head>
+<body>
+
+<div class="title" onclick="toggleEM()">Цахилгаан соронзон орон (E = F / q)</div>
+
+<div id="emPanel" class="panel">
+
+    <div class="line"><b>Цахилгаан соронзон орон:</b> Цахилгаан хүч, цэнэгийн харьцаар цахилгаан талбарыг тодорхойлдог.</div>
+    <div class="line">Томьёо: E = F / q</div>
+    <div class="line">E — Цахилгаан талбар (N/C)</div>
+    <div class="line">F — Цахилгаан хүч (N)</div>
+    <div class="line">q — Цэнэг (C)</div>
+
+    <div class="line" style="margin-top:20px;"><b>Цахилгаан соронзон орон калькулятор</b></div>
+
+    <div class="line calc">
+        <input id="E" type="number" step="any" placeholder="E (N/C)" />
+        <input id="F" type="number" step="any" placeholder="F (N)" />
+        <input id="q" type="number" step="any" placeholder="q (C)" />
+
+        <button class="btn" onclick="calcEM()">Бодох</button>
+    </div>
+
+    <div class="line result" id="em-result">Энд E, F, q–ийн нэг нь автоматаар гарна.</div>
+</div>
+
+<script>
+function toggleEM() {
+    const panel = document.getElementById("emPanel");
+    panel.classList.toggle("open");
+
+    const lines = panel.querySelectorAll(".line");
+
+    if (panel.classList.contains("open")) {
+        lines.forEach((line, idx) => {
+            setTimeout(() => line.classList.add("show"), idx * 120);
+        });
+    } else {
+        lines.forEach(line => line.classList.remove("show"));
+    }
+}
+
+function calcEM() {
+    const Eval = parseFloat(document.getElementById("E").value);
+    const Fval = parseFloat(document.getElementById("F").value);
+    const qval = parseFloat(document.getElementById("q").value);
+    const out = document.getElementById("em-result");
+
+    let E = isNaN(Eval) ? null : Eval;
+    let F = isNaN(Fval) ? null : Fval;
+    let q = isNaN(qval) ? null : qval;
+
+    let result = "";
+
+    // 1) E = F / q
+    if (E === null && F !== null && q !== null && q !== 0) {
+        result = `E = ${(F/q).toFixed(3)} N/C`;
+    }
+    // 2) F = E * q
+    else if (F === null && E !== null && q !== null) {
+        result = `F = ${(E*q).toFixed(3)} N`;
+    }
+    // 3) q = F / E
+    else if (q === null && F !== null && E !== null && E !== 0) {
+        result = `q = ${(F/E).toFixed(3)} C`;
+    }
+    else {
+        result = "2 утга оруулна уу!";
+    }
+
+    out.innerHTML = result;
+}
+</script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<title>Конденсаторын холбоо (C_eq = C1 + C2)</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #FF9A5C;
+        padding: 20px;
+    }
+    .title {
+        background: #27BEF5;
+        color: white;
+        padding: 12px 16px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 20px;
+        font-weight: bold;
+        width: fit-content;
+        transition: 0.3s;
+    }
+    .title:hover { background:#0995C8
+; }
+
+    .panel {
+        max-height: 0;
+        overflow: hidden;
+        background: white;
+        border-radius: 10px;
+        margin-top: 10px;
+        padding: 0 16px;
+        transition: max-height 0.4s ease, padding 0.4s ease;
+        box-shadow: 0 4px 12px #0002;
+    }
+    .panel.open {
+        max-height: 800px;
+        padding: 16px;
+    }
+
+    .line {
+        opacity: 0;
+        transform: translateY(12px);
+        transition: 0.4s ease;
+        margin: 8px 0;
+        font-size: 18px;
+    }
+    .line.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .calc input {
+        padding: 8px;
+        margin: 5px;
+        width: 140px;
+        border-radius: 6px;
+        border: 1px solid #bdbdbd;
+    }
+
+    .btn {
+        padding: 10px 15px;
+        background: #7c2d12;
+        border: none;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .result {
+        margin-top: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #111;
+    }
+</style>
+</head>
+<body>
+
+<div class="title" onclick="toggleCap()">Конденсаторын параллель холбоо (C_eq = C1 + C2)</div>
+
+<div id="capPanel" class="panel">
+
+    <div class="line"><b>Конденсаторын холбоо:</b> Параллель холболтод багтаамжуудыг шууд нэмдэг.</div>
+    <div class="line">Томьёо: C_eq = C1 + C2</div>
+    <div class="line">C_eq — Тэнцүү багтаамж (F)</div>
+    <div class="line">C1 — Конденсатор 1 (F)</div>
+    <div class="line">C2 — Конденсатор 2 (F)</div>
+
+    <div class="line" style="margin-top:20px;"><b>Конденсаторын калькулятор</b></div>
+
+    <div class="line calc">
+        <input id="Ceq" type="number" step="any" placeholder="C_eq (F)" />
+        <input id="C1" type="number" step="any" placeholder="C1 (F)" />
+        <input id="C2" type="number" step="any" placeholder="C2 (F)" />
+
+        <button class="btn" onclick="calcCap()">Бодох</button>
+    </div>
+
+    <div class="line result" id="cap-result">Энд C_eq, C1, C2–ийн нэг нь автоматаар гарна.</div>
+</div>
+
+<script>
+function toggleCap() {
+    const panel = document.getElementById("capPanel");
+    panel.classList.toggle("open");
+
+    const lines = panel.querySelectorAll(".line");
+
+    if (panel.classList.contains("open")) {
+        lines.forEach((line, idx) => {
+            setTimeout(() => line.classList.add("show"), idx * 120);
+        });
+    } else {
+        lines.forEach(line => line.classList.remove("show"));
+    }
+}
+
+function calcCap() {
+    const CeqVal = parseFloat(document.getElementById("Ceq").value);
+    const C1Val = parseFloat(document.getElementById("C1").value);
+    const C2Val = parseFloat(document.getElementById("C2").value);
+    const out = document.getElementById("cap-result");
+
+    let Ceq = isNaN(CeqVal) ? null : CeqVal;
+    let C1 = isNaN(C1Val) ? null : C1Val;
+    let C2 = isNaN(C2Val) ? null : C2Val;
+
+    let result = "";
+
+    // 1) Ceq = C1 + C2
+    if (Ceq === null && C1 !== null && C2 !== null) {
+        result = `C_eq = ${(C1+C2).toFixed(6)} F`;
+    }
+    // 2) C1 = Ceq - C2
+    else if (C1 === null && Ceq !== null && C2 !== null) {
+        result = `C1 = ${(Ceq-C2).toFixed(6)} F`;
+    }
+    // 3) C2 = Ceq - C1
+    else if (C2 === null && Ceq !== null && C1 !== null) {
+        result = `C2 = ${(Ceq-C1).toFixed(6)} F`;
+    } 
+    else {
+        result = "2 утга оруулна уу!";
+    }
+
+    out.innerHTML = result;
+}
+</script>
+
+</body>
+</html><div class="title" onclick="toggleInductor()">Индукторын Цуваа Холболт (L_eq = L1 + L2)</div>
+
+<div id="inductorPanel" class="panel">
+
+    <div class="line"><b>Индукторын холбоо:</b> Цуваа холболтод индукцлэлүүдийг шууд нэмдэг.</div>
+    <div class="line">Томьёо: L_eq = L1 + L2</div>
+    <div class="line">L_eq — Тэнцүү индукцлэл (H)</div>
+    <div class="line">L1 — Индуктор 1 (H)</div>
+    <div class="line">L2 — Индуктор 2 (H)</div>
+
+    <div class="line" style="margin-top:20px;"><b>Индукторын калькулятор</b></div>
+
+    <div class="line calc">
+        <input id="Leq" type="number" step="any" placeholder="L_eq (H)" />
+        <input id="L1" type="number" step="any" placeholder="L1 (H)" />
+        <input id="L2" type="number" step="any" placeholder="L2 (H)" />
+
+        <button class="btn" onclick="calcInductor()">Бодох</button>
+    </div>
+
+    <div class="line result" id="inductor-result">Энд L_eq, L1, L2–ийн нэг нь автоматаар гарна.</div>
+</div>
+
+<script>
+function toggleInductor() {
+    const panel = document.getElementById("inductorPanel");
+    panel.classList.toggle("open");
+
+    // Үзэгдэх байдлын анимацыг нэмэх
+    const lines = panel.querySelectorAll(".line");
+    if (panel.classList.contains("open")) {
+        lines.forEach((line, idx) => {
+            setTimeout(() => line.classList.add("show"), idx * 120);
+        });
+    } else {
+        lines.forEach(line => line.classList.remove("show"));
+    }
+}
+
+function calcInductor() {
+    const LeqVal = parseFloat(document.getElementById("Leq").value);
+    const L1Val = parseFloat(document.getElementById("L1").value);
+    const L2Val = parseFloat(document.getElementById("L2").value);
+    const out = document.getElementById("inductor-result");
+
+    let Leq = isNaN(LeqVal) ? null : LeqVal;
+    let L1 = isNaN(L1Val) ? null : L1Val;
+    let L2 = isNaN(L2Val) ? null : L2Val;
+
+    let result = "";
+
+    // L_eq = L1 + L2
+    if (Leq === null && L1 !== null && L2 !== null) {
+        result = `L_eq = ${(L1 + L2).toFixed(6)} H`;
+    }
+    // L1 = L_eq - L2
+    else if (L1 === null && Leq !== null && L2 !== null) {
+        result = `L1 = ${(Leq - L2).toFixed(6)} H`;
+    }
+    // L2 = L_eq - L1
+    else if (L2 === null && Leq !== null && L1 !== null) {
+        result = `L2 = ${(Leq - L1).toFixed(6)} H`;
+    }
+    else {
+        result = "2 утга оруулна уу!";
+    }
+
+    out.innerHTML = result;
+}
+</script>
+
+<style>
+/* Гарчиг */
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 15px 0;
+    cursor: pointer;
+}
+
+/* Панель (эхлээд хаалттай) */
+.panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
+}
+
+/* Нээгдэх үед */
+.panel.open {
+    max-height: 800px;
+}
+
+/* Мөрүүдийн анхны төлөв */
+.line {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: 0.4s ease;
+}
+
+/* Урсаж доош гарч ирэх үед */
+.line.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.calc input {
+    width: 140px;
+    margin: 5px;
+}
+
+.btn {
+    padding: 6px 14px;
+    margin-top: 10px;
+}
+
+.result {
+    margin-top: 10px;
+    font-weight: bold;
+}
+</style>
+
+
+<div class="title" onclick="toggleDiffraction()">Долгионы Дифракц (d sinθ = m λ)</div>
+
+<div id="diffractionPanel" class="panel">
+
+    <div class="line"><b>Долгионы Дифракц:</b> Дифракцын тороор гэрэл өнгөрөх үед.</div>
+    <div class="line">Томьёо: d · sin(θ) = m · λ</div>
+    <div class="line">d — Торын зай (м)</div>
+    <div class="line">θ — Дифракцын өнцөг (градус)</div>
+    <div class="line">m — Эрэмбийн тоо (Бүхэл)</div>
+    <div class="line">λ — Долгионы урт (м)</div>
+
+    <div class="line" style="margin-top:20px;"><b>Дифракцын калькулятор</b></div>
+
+    <div class="line calc">
+        <input id="d_val" type="number" step="any" placeholder="d (м)">
+        <input id="theta_val" type="number" step="any" placeholder="θ (°)">
+        <input id="m_val" type="number" step="1" placeholder="m">
+        <input id="lambda_val" type="number" step="any" placeholder="λ (м)">
+        <button class="btn" onclick="calcDiffraction()">Бодох</button>
+    </div>
+
+    <div class="line result" id="diffraction-result">Дөрвөн утгаас гурвыг нь оруулна уу.</div>
+</div>
+
+
+<script>
+function toggleDiffraction() {
+    const panel = document.getElementById("diffractionPanel");
+    panel.classList.toggle("open");
+    const lines = panel.querySelectorAll(".line");
+
+    if (panel.classList.contains("open")) {
+        lines.forEach((line, i) => {
+            setTimeout(() => line.classList.add("show"), i * 120);
+        });
+    } else {
+        lines.forEach(line => line.classList.remove("show"));
+    }
+}
+
+
+
+
+function calcDiffraction() {
+    const d = parseFloat(document.getElementById("d_val").value);
+    const theta_deg = parseFloat(document.getElementById("theta_val").value);
+    const m = parseFloat(document.getElementById("m_val").value);
+    const lambda = parseFloat(document.getElementById("lambda_val").value);
+    const out = document.getElementById("diffraction-result");
+
+    const isNaNd = isNaN(d);
+    const isNaNtheta = isNaN(theta_deg);
+    const isNaNm = isNaN(m);
+    const isNaNlambda = isNaN(lambda);
+
+    const nullCount = [isNaNd, isNaNtheta, isNaNm, isNaNlambda].filter(v => v).length;
+
+    if (nullCount !== 1) {
+        out.innerHTML = "Дөрвөн утгаас яг ГУРВЫГ нь оруулна уу!";
+        return;
+    }
+
+    const PI = Math.PI;
+    let result = "";
+
+    if (isNaNlambda) {
+        const theta_rad = theta_deg * (PI / 180);
+        const λ = (d * Math.sin(theta_rad)) / m;
+        result = `λ = ${λ.toExponential(4)} м`;
+    } 
+    else if (isNaNd) {
+        const theta_rad = theta_deg * (PI / 180);
+        const d_val = (m * lambda) / Math.sin(theta_rad);
+        result = `d = ${d_val.toExponential(4)} м`;
+    } 
+    else if (isNaNtheta) {
+        const ratio = (m * lambda) / d;
+        if (ratio > 1 || ratio < -1) {
+            result = "Өгөгдөл буруу (sinθ боломжгүй)";
+        } else {
+            const θ = Math.asin(ratio) * (180 / PI);
+            result = `θ = ${θ.toFixed(4)} градус`;
+        }
+    } 
+    else if (isNaNm) {
+        const θ = theta_deg * (PI / 180);
+        const m_val = (d * Math.sin(θ)) / lambda;
+        result = `m = ${m_val.toFixed(4)}`;
+    }
+
+    out.innerHTML = result;
+}
+</script>
+
+</script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <title>Polygon Background</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+
+            /* Gradient + Polygon Pattern */
+            background: 
+                linear-gradient(135deg, #FF6200, #FFBA8F),
+                url("https://www.transparenttextures.com/patterns/triangles.png");
+
+            background-blend-mode: multiply;
+            background-size: cover;
+            background-repeat: repeat;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            padding-top: 40px;
+            text-shadow: 0 0 10px rgba(0,0,0,0.4);
+        }
+    </style>
+</head>
+<body>
+</html>
